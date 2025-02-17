@@ -1,11 +1,38 @@
 import express from "express";
+import sequelize from "./config/config.js";
+import multer from 'multer';
+import cors from "cors";
+import projectRoutes from './routes/projectRoute.js'
 
 const app = express();
-const port = 3090;
+const port = process.env.PORT || 3090;
+const upload = multer();
 
+// mengizinkan url frontend untuk mengakses api
+app.use(
+  cors({
+      origin: "http://localhost:5173",
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+  })
+)
+
+// Middleware untuk membaca JSON dan Url-encoded
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+// Middleware untuk menangani `Multipart/form-data`
+app.use(upload.none()); // membuat req.body agar terbaca ketika menggunakan FormData
 
 const init = async () => {
   try {
+    await sequelize.authenticate();
+    console.log('Success connected to the database');
+    await sequelize.sync();
+    console.log("Database & tables created");
+
+    app.use("/api/v1", projectRoutes);
+
     app.get("/", (req, res) => {
       res.send("Hello World!");
       console.log("Response sent");
