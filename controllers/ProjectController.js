@@ -1,6 +1,6 @@
-import Project from "../models/projectModel.js";
+import Project from "../models/Project.js";
 
-// Get all Project
+// Get all Projects
 export const getAllProjects = async(req, res) => {
   try {
     const {data, total} = await Project.getAllProjects()
@@ -18,23 +18,31 @@ export const getAllProjects = async(req, res) => {
   }
 }
 
+// Get Project by id
 export const getProjectById = async(req, res) => {
   const {id_project} = req.params
 
   try {
     const project = await Project.getProjectById(parseInt(id_project))
-
-    res.status(200).json({
-      status: 'success',
-      data: project,
-      message: "Projects fetched successfully"
-    });
+    
+    if(project){
+      res.status(200).json({
+        status: 'success',
+        data: project,
+        message: "Projects fetched successfully"
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        message: "Projects not found"
+      });
+    }
   } catch (error) {
-    console.log(req.params);
     res.status(500).json({message: error.message})
   }
 }
 
+// Add Project
 export const postProject = async(req, res) => {
   const projectData = req.body;
 
@@ -54,6 +62,7 @@ export const postProject = async(req, res) => {
   }
 }
 
+// Update project by id
 export const updateProjectById = async(req, res) => {
   const {id_project} = req.params;
   const projectData = req.body;
@@ -74,6 +83,7 @@ export const updateProjectById = async(req, res) => {
   }
 }
 
+// Delete project by id
 export const deleteProjectById = async(req, res) => {
   const {id_project} = req.params
 
