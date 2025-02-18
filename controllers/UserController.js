@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import bcrypt from "bcryptjs";
 
 // Get all data users
 export const GetAllUsers = async(req, res) => {
@@ -47,11 +48,11 @@ export const GetUserById = async(req, res) => {
 
 // Add new user data
 export const AddUser = async(req, res) => {
-  const {id_user} = req.params;
-  const userData = req.body;
+  const {username, password, nama_lengkap, role} = req.body;
+  const hashPassword = bcrypt.hashSync(password, 10);
 
   try {
-    const result = await User.postUser(userData, parseInt(id_user));
+    const result = await User.postUser(username, hashPassword, nama_lengkap, role);
 
     res.status(201).json({
       status: 'success',
@@ -70,9 +71,11 @@ export const AddUser = async(req, res) => {
 // Update data user by id
 export const UpdateUserById = async(req, res) => {
   const {id_user} = req.params;
-  const userData = req.body;
+  const {username, password, nama_lengkap, role} = req.body;
+  const hashPassword = bcrypt.hashSync(password, 10);
+
   try {
-    const result = await User.updateUserById(userData, parseInt(id_user));
+    const result = await User.updateUserById(username, hashPassword, nama_lengkap, role, parseInt(id_user));
 
     res.status(200).json({
       status: 'success',
