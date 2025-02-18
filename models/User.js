@@ -49,29 +49,30 @@ const User = {
   },
 
   // Post data user
-  postUser: async(userData) => {
-    const {username, password, nama_lengkap} = userData;
+  postUser: async(username, password, nama_lengkap, role) => {
     const query = `
-    INSERT INTO user (username, password, nama_lengkap) VALUES(?, ?, ?)
+    INSERT INTO user (username, password, nama_lengkap, role) VALUES(?, ?, ?, ?)
     `
     const [result] = await sequelize.query(query, {
-      replacements: [username, password, nama_lengkap]
+      replacements: [username, password, nama_lengkap, role]
     })
 
     return {
       id_user: result.insertId,
-      ...userData
+      username,
+      password,
+      nama_lengkap,
+      role
     }
   },
 
   // Update data user
-  updateUserById: async(userData, userId) => {
-    const {username, password, nama_lengkap} = userData;
+  updateUserById: async(username, password, nama_lengkap, role, userId) => {
     const query = `
-    UPDATE user SET username = ?, password = ?, nama_lengkap = ? WHERE id_user=?
+    UPDATE user SET username = ?, password = ?, nama_lengkap = ?, role = ? WHERE id_user=?
     `;
     const [result] = await sequelize.query(query, {
-      replacements: [username, password, nama_lengkap, userId]
+      replacements: [username, password, nama_lengkap, role, userId]
     })
 
     return result.affectedRows > 0;
