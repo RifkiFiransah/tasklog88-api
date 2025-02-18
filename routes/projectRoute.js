@@ -3,7 +3,7 @@ import * as projectController from "../controllers/ProjectController.js"; // Mak
 
 const router = express.Router();
 
-// Routes for Project
+// Routes for Project without authentication and authorization
 router.get("/projects", projectController.getAllProjects);
 router.get("/projects/:id_project", projectController.getProjectById);
 router.post("/projects/", projectController.postProject);

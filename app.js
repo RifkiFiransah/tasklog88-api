@@ -2,7 +2,8 @@ import express from "express";
 import sequelize from "./config/config.js";
 import multer from 'multer';
 import cors from "cors";
-import projectRoutes from './routes/projectRoute.js'
+import projectRoutes from './routes/projectRoute.js';
+import userRoutes from './routes/userRoute.js';
 
 const app = express();
 const port = process.env.PORT || 3090;
@@ -32,6 +33,7 @@ const init = async () => {
     console.log("Database & tables created");
 
     app.use("/api/v1", projectRoutes);
+    app.use('/api/v1', userRoutes);
 
     app.get("/", (req, res) => {
       res.send("Hello World!");
