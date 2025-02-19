@@ -1,21 +1,21 @@
 import express from "express";
 import sequelize from "./config/config.js";
-import multer from 'multer';
 import cors from "cors";
 import projectRoutes from './routes/projectRoute.js';
 import userRoutes from './routes/userRoute.js';
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from "./routes/taskRoutes.js";
 import pengerjaanRoutes from "./routes/pengerjaanRoutes.js";
+import upload from "./middlewares/uploadMiddleware.js";
 
 const app = express();
 const port = process.env.PORT || 3090;
-const upload = multer();
+// const upload = multer();
 
 // mengizinkan url frontend untuk mengakses api
 app.use(
   cors({
-      origin: "http://localhost:3000",
+      origin: ["http://localhost:3000", ""],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization']
   })
@@ -26,7 +26,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Middleware untuk menangani `Multipart/form-data`
-app.use(upload.none()); // membuat req.body agar terbaca ketika menggunakan FormData
+// app.use(upload.none()); // membuat req.body agar terbaca ketika menggunakan FormData
+app.use('/uploads', express.static('uploads'));
 
 const init = async () => {
   try {
@@ -39,7 +40,11 @@ const init = async () => {
     app.use('/api/v1', userRoutes);
     app.use('/api/v1', authRoutes);
     app.use('/api/v1', taskRoutes);
-    app.use('/api/v1', pengerjaanRoutes);
+    app.use('/api/v1', upload.fields([
+        { name: 'file_github', maxCount: 1 },
+        { name: 'file_ss', maxCount: 1 }
+      ]),
+    pengerjaanRoutes);
 
     app.get("/", (req, res) => {
       res.send("Hello World!");

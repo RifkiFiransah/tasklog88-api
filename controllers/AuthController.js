@@ -12,10 +12,10 @@ export const login = async(req, res) => {
 
   try {
     const query = `
-      SELECT * FROM user WHERE username = :username
+      SELECT * FROM user WHERE username = ?
     `;
     const [user] = await sequelize.query(query, {
-      replacements: {username},
+      replacements: [username],
       type: sequelize.QueryTypes.SELECT,
     })
     // console.log(user);

@@ -34,4 +34,10 @@ router.post("/pengerjaans",
   pengerjaanController.postPengerjaan
 );
 
+router.post("/log_pengerjaans/:id_pengerjaan",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
+  pengerjaanController.postLogPengerjaan
+);
+
 export default router;

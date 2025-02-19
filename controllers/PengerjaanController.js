@@ -96,7 +96,20 @@ export const getDetailPengerjaanByTaskId = async(req, res) => {
 };
 
 export const postPengerjaan = async(req, res) => {
-  const pengerjaanData = req.body;
+  console.log("Body Data:", req.body);
+
+  const { id_task, catatan, jenis_catatan, tgl_pengerjaan } = req.body;
+  const file_github = req.files?.file_github ? req.files.file_github[0].path : null;
+  const file_ss = req.files?.file_ss ? req.files.file_ss[0].path : null;
+
+  if (!file_github || !file_ss) {
+    return res.status(400).json({
+      status: "error",
+      message: "Both 'file_github' and 'file_ss' are required!"
+    });
+  }
+
+  const pengerjaanData = {id_task, file_github, file_ss, catatan, jenis_catatan, tgl_pengerjaan}
 
   try {
     const result = await Pengerjaan.addPengerjaan(pengerjaanData);
@@ -111,9 +124,32 @@ export const postPengerjaan = async(req, res) => {
       message: 'created data pengerjaan success'
     });
   } catch (error) {
+    console.log("Files Data:", file_github);
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'
     });
   }
 };
+
+export const postLogPengerjaan = async(req, res) => {
+  const {id_pengerjaan} = req.params;
+  const pengerjaanData = req.body;
+
+  try {
+    const result = await LogPengerjaan.addLogPengerjaan(id_pengerjaan, pengerjaanData)
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        result,
+      },
+      message: 'created data pengerjaan success'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    })
+  }
+}

@@ -90,7 +90,7 @@ const Pengerjaan = {
     INSERT INTO pengerjaan (id_task, file_github, file_ss) VALUES (?, ?, ?)
     `;
 
-    const [result, metadata] = await sequelize.query(query, {
+    const [result] = await sequelize.query(query, {
       replacements: [parseInt(id_task), file_github, file_ss]
     })
 
