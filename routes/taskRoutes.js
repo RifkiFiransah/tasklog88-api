@@ -10,22 +10,22 @@ router.get("/tasks",
   taskController.getAllTasks
 );
 
+router.get("/tasks/user", 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  taskController.getTaskByUser
+);
+
+router.put("/tasks/:id_task/user", 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  taskController.updateTaskByUser
+);
+
 router.get("/tasks/:id_task", 
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
   taskController.getTaskById
-);
-
-router.get("/tasks/user", 
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
-  taskController.getTaskByUser
-);
-
-router.put("/tasks/user", 
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
-  taskController.updateTaskByUser
 );
 
 router.post("/tasks", 

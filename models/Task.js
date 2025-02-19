@@ -108,20 +108,20 @@ const Task = {
   },
 
   // Update status Task by user
-  updateStatusTaskByUser: async(statusTask, userId, taskId) => {
+  updateStatusTaskByUser: async(dataTask, userId, taskId) => {
+    const {status_task} = dataTask;
+
     const query = `
-      UPDATE task SET status_task = ? WHERE task_id = ? AND WHERE id_user = ?
+      UPDATE task SET status_task = ? WHERE id_task = ? AND id_user = ?
     `;
 
-    const data = await sequelize.query(query, {
-      replacements: [statusTask, taskId, userId]
+    const [data] = await sequelize.query(query, {
+      replacements: [status_task, taskId, userId]
     });
 
-    console.log("data: "+data[0]);
+    // console.log("data: "+data[0]);
 
-    return {
-      data
-    }
+    return data.affectedRows > 0;
   },
 
   // Update Task By Id

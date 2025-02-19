@@ -21,34 +21,6 @@ export const getAllTasks = async(req, res) => {
   }
 };
 
-export const getTaskById = async(req, res) => {
-  const {id_task} = req.params;
-
-  try {
-    const data = await Task.getTaskById(parseInt(id_task));
-    
-    if(data){
-      res.status(200).json({
-        status: 'success',
-        data,
-        message: 'Task by id fetched successfully'
-      });
-    } else {
-      res.status(404).json({
-        status: 'error',
-        data,
-        message: 'Task by id not found'
-      });
-    }
-  } catch (error) {
-    console.error("Error get task: ", error.message);
-    res.status(500).json({
-      status: 'error',
-      message: 'Internal server error'
-    });
-  }
-}
-
 export const getTaskByUser = async(req, res) => {
   const id_user = req.userId;
   console.log(id_user);
@@ -71,6 +43,34 @@ export const getTaskByUser = async(req, res) => {
     }
   } catch (error) {
     console.error("Error task: ", error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
+export const getTaskById = async(req, res) => {
+  const {id_task} = req.params;
+
+  try {
+    const data = await Task.getTaskById(parseInt(id_task));
+    
+    if(data){
+      res.status(200).json({
+        status: 'success',
+        data,
+        message: 'Task by id fetched successfully'
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        data,
+        message: 'Task by id not found'
+      });
+    }
+  } catch (error) {
+    console.error("Error get task: ", error.message);
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'
@@ -102,7 +102,7 @@ export const updateTaskByUser = async(req, res) => {
   const dataTask = req.body;
 
   try {
-    const result = await Task.updateTaskById(dataTask, parseInt(id_user), parseInt(id_task));
+    const result = await Task.updateStatusTaskByUser(dataTask, parseInt(id_user), parseInt(id_task));
 
     if(result) {
       res.status(200).json({
@@ -111,6 +111,8 @@ export const updateTaskByUser = async(req, res) => {
         message: "Task updated successfully"
       });
     } else {
+      console.log(result);
+      
       res.status(404).json({
         status: 'error',
         message: "Task not found"
