@@ -1,4 +1,5 @@
 import Pengerjaan from "../models/Pengerjaan.js";
+import LogPengerjaan from "../models/LogPengerjaan.js";
 
 export const getAllPengerjaan = async(req, res) => {
   try {
@@ -99,10 +100,14 @@ export const postPengerjaan = async(req, res) => {
 
   try {
     const result = await Pengerjaan.addPengerjaan(pengerjaanData);
+    const logResult = await LogPengerjaan.addLogPengerjaan(result.id, pengerjaanData)
     
     res.status(201).json({
       status: 'success',
-      data: result,
+      data: {
+        result,
+        logResult
+      },
       message: 'created data pengerjaan success'
     });
   } catch (error) {
