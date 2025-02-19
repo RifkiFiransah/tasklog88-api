@@ -28,4 +28,4 @@ Follow these steps to set up the project on your local machine:
 
 4. **Start**:
     ```
-    npm run start
+    docker compose up --build
