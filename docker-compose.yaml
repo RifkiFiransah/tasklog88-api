@@ -1,7 +1,7 @@
 services:
-  app: 
-    build: 
-      context: 
+  app:
+    build:
+      context: .
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
