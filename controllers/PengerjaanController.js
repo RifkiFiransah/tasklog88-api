@@ -104,7 +104,7 @@ export const postPengerjaan = async(req, res) => {
   const file_github = req.files?.file_github ? req.files.file_github[0].path : null;
   const file_ss = req.files?.file_ss ? req.files.file_ss[0].path : null;
   
-  console.log("Files Data:", req.file_github);
+  // console.log("Files Data:", req.file_github);
   if (!file_github || !file_ss) {
     return res.status(400).json({
       status: "error",
@@ -154,21 +154,27 @@ export const updatePengerjaanByid = async (req, res) => {
     }
 
     // Cek apakah ada file baru
-    if(file_github_new && pengerjaanOld.file_github) {
-      // Menghapus file lama
-      const filePathGithub = path.join(process.cwd(), pengerjaanOld.file_github)
-      if(fs.existsSync(filePathGithub)) {
+    if (file_github_new && pengerjaanOld.file_github) {
+      const filePathGithub = path.normalize(pengerjaanOld.file_github);
+      console.log("Cek Path File Github:", filePathGithub);
+    
+      if (fs.existsSync(filePathGithub)) {
         fs.unlinkSync(filePathGithub);
         console.log(`✅ File lama file_github (${pengerjaanOld.file_github}) dihapus`);
+      } else {
+        console.log("⚠️ File Github lama tidak ditemukan:", filePathGithub);
       }
     }
-   
-    if(file_ss_new && pengerjaanOld.file_ss) {
-      // Menghapus file lama
-      const filePathSs = path.join(process.cwd(), pengerjaanOld.file_ss)
-      if(fs.existsSync(filePathSs)) {
+    
+    if (file_ss_new && pengerjaanOld.file_ss) {
+      const filePathSs = path.normalize(pengerjaanOld.file_ss);
+      console.log("Cek Path File SS:", filePathSs);
+    
+      if (fs.existsSync(filePathSs)) {
         fs.unlinkSync(filePathSs);
         console.log(`✅ File lama file_ss (${pengerjaanOld.file_ss}) dihapus`);
+      } else {
+        console.log("⚠️ File SS lama tidak ditemukan:", filePathSs);
       }
     }
 

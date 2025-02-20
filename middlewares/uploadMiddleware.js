@@ -1,8 +1,26 @@
 import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+// Fungsi untuk memastikan folder target ada sebelum digunakan
+const ensureDirectoryExists = (dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+};
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/')
+    let uploadPath = "uploads/"; // Default path
+
+    if (file.fieldname === "file_github") {
+      uploadPath = "uploads/github";
+    } else if (file.fieldname === "file_ss") {
+      uploadPath = "uploads/ss";
+    }
+
+    ensureDirectoryExists(uploadPath); // Pastikan folder ada sebelum upload
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);

@@ -68,14 +68,14 @@ export const AddUser = async(req, res) => {
   }
 }
 
-// Update data user by id
+// Update data user by id without password
 export const UpdateUserById = async(req, res) => {
   const {id_user} = req.params;
-  const {username, password, nama_lengkap, role} = req.body;
-  const hashPassword = bcrypt.hashSync(password, 10);
+  const {username, nama_lengkap, role} = req.body;
+  // const hashPassword = bcrypt.hashSync(password, 10);
 
   try {
-    const result = await User.updateUserById(username, hashPassword, nama_lengkap, role, parseInt(id_user));
+    const result = await User.updateUserWithoutPassword(username, nama_lengkap, role, parseInt(id_user));
 
     res.status(200).json({
       status: 'success',
@@ -84,6 +84,28 @@ export const UpdateUserById = async(req, res) => {
     });
   } catch (error) {
     console.error("Error update user by id: ", error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
+export const UpdateUserWithPassword = async(req, res) => {
+  const {id_user} = req.params;
+  const {password} = req.body;
+  const hashPassword = bcrypt.hashSync(password, 10);
+
+  try {
+    const result = await User.updateUserPassword(hashPassword, parseInt(id_user));
+
+    res.status(200).json({
+      status: 'success',
+      data: result,
+      message: 'User updated password successfully'
+    });
+  } catch (error) {
+    console.error("Error update user password: ", error);
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'

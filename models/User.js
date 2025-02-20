@@ -78,6 +78,29 @@ const User = {
     return result.affectedRows > 0;
   },
 
+  // Update data user without password
+  updateUserWithoutPassword: async(username, nama_lengkap, role, userId) => {
+    const query = `
+      UPDATE user SET username = ?, nama_lengkap = ?, role = ? WHERE id_user = ?
+    `;
+    const [result] = await sequelize.query(query, {
+      replacements: [username, nama_lengkap, role, userId]
+    })
+
+    return result.affectedRows > 0;
+  },
+  
+  updateUserPassword: async(password, userId) => {
+    const query = `
+      UPDATE user SET password = ? WHERE id_user = ?
+    `;
+    const [result] = await sequelize.query(query, {
+      replacements: [password, userId]
+    })
+
+    return result.affectedRows > 0;
+  },
+
   // Delete data user
   deleteUserById: async(userId) => {
     const query = `
