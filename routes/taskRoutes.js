@@ -10,6 +10,12 @@ router.get("/tasks",
   taskController.getAllTasks
 );
 
+router.get("/task", 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
+  taskController.getAllTask
+);
+
 router.get("/tasks/user", 
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(["peserta"]),

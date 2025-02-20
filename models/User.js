@@ -34,6 +34,41 @@ const User = {
       throw new Error("Error fetching data: "+error.message)
     }
   },
+ 
+  getAllUser: async(page = 1, limit = 10) => {
+    const offset = (page - 1) * limit;
+    try {
+      const query = `
+        SELECT * FROM user LIMIT :limit OFFSET :offset
+      `
+      const data = await sequelize.query(query, {
+        replacements: {
+          limit: limit,
+          offset: offset
+        },
+        type: sequelize.QueryTypes.SELECT
+      })
+
+      return data;
+      
+    } catch (error) {
+      throw new Error("Error fetching data: "+error.message)
+    }
+  },
+
+  
+  searchUser: async(keyword) => {
+    const query = `
+      SELECT * FROM user 
+      WHERE username LIKE ? OR role LIKE ? OR nama_lengkap LIKE ? 
+    `;
+
+    const data = await sequelize.query(query, {
+      replacements: [`%${keyword}%`, `%${keyword}%`,  `%${keyword}%`]
+    });
+
+    return data[0]
+  },
 
   // Get data user by id
   getUserById: async(userId) => {

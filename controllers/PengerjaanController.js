@@ -3,14 +3,33 @@ import LogPengerjaan from "../models/LogPengerjaan.js";
 import path from "path";
 import fs from "fs";
 
-export const getAllPengerjaan = async(req, res) => {
+export const getAllPengerjaans = async(req, res) => {
   try {
-    const result = await Pengerjaan.getAllPengerjaan();
+    const result = await Pengerjaan.getAllPengerjaans();
 
     res.status(200).json({
       status: 'success',
       data: result,
       message: "fetched all data pengerjaan success"
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+};
+
+export const getAllPengerjaan = async(req, res) => {
+  const {page = 1, limit = 10 } = req.query
+
+  try {
+    const result = await Pengerjaan.getAllPengerjaan(parseInt(page), parseInt(limit));
+
+    res.status(200).json({
+      status: 'success',
+      data: result,
+      message: "fetched limit data pengerjaan success"
     });
   } catch (error) {
     res.status(500).json({
@@ -160,9 +179,9 @@ export const updatePengerjaanByid = async (req, res) => {
     
       if (fs.existsSync(filePathGithub)) {
         fs.unlinkSync(filePathGithub);
-        console.log(`✅ File lama file_github (${pengerjaanOld.file_github}) dihapus`);
+        console.log(`File lama file_github (${pengerjaanOld.file_github}) dihapus`);
       } else {
-        console.log("⚠️ File Github lama tidak ditemukan:", filePathGithub);
+        console.log("File Github lama tidak ditemukan:", filePathGithub);
       }
     }
     
@@ -172,9 +191,9 @@ export const updatePengerjaanByid = async (req, res) => {
     
       if (fs.existsSync(filePathSs)) {
         fs.unlinkSync(filePathSs);
-        console.log(`✅ File lama file_ss (${pengerjaanOld.file_ss}) dihapus`);
+        console.log(`File lama file_ss (${pengerjaanOld.file_ss}) dihapus`);
       } else {
-        console.log("⚠️ File SS lama tidak ditemukan:", filePathSs);
+        console.log("File SS lama tidak ditemukan:", filePathSs);
       }
     }
 

@@ -2,16 +2,27 @@ import Task from "../models/Task.js";
 
 export const getAllTasks = async(req, res) => {
   try {
-    const {data, total} = await Task.getAllTasks();
-
-    res.status(200).json({
-      status: 'success',
-      data: {
+    const {keyword} = req.query
+    if(!keyword){
+      const {data, total} = await Task.getAllTasks();
+  
+      res.status(200).json({
+        status: 'success',
+        data: {
+          data,
+          total
+        },
+        message: 'Tasks fetched successfully'
+      });
+    } else {
+      const data = await Task.searchTasks(keyword);
+  
+      res.status(200).json({
+        status: 'success',
         data,
-        total
-      },
-      message: 'Tasks fetched successfully'
-    });
+        message: 'Tasks fetched successfully'
+      });
+    }
   } catch (error) {
     console.error("Error get all tasks: ", error.message);
     res.status(500).json({
@@ -20,6 +31,26 @@ export const getAllTasks = async(req, res) => {
     });
   }
 };
+
+export const getAllTask = async(req, res) => {
+  const {page = 1, limit = 10}= req.query;
+
+  try {
+    const data = await Task.getAllTask(parseInt(page), parseInt(limit));
+
+    res.status(200).json({
+      status: 'success',
+      data,
+      message: 'Task limit offset fetched successfully'
+    });
+  } catch (error) {
+    console.error("Error get limit offset tasks: ", error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
 
 export const getTaskByUser = async(req, res) => {
   const id_user = req.userId;
@@ -89,7 +120,7 @@ export const postTask = async(req, res) => {
       message: 'Add new task data successfully'
     });
   } catch (error) {
-    
+
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'

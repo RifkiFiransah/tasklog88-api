@@ -3,16 +3,44 @@ import Project from "../models/Project.js";
 // Get all Projects
 export const getAllProjects = async(req, res) => {
   try {
-    const {data, total} = await Project.getAllProjects()
+    const {keyword} = req.query
+    if(!keyword){
+      const {data, total} = await Project.getAllProjects()
+  
+      res.status(200).json({
+        status: 'success',
+        project: {
+          data,
+          totalData: total
+        },
+        message: "Projects fetched successfully"
+      });
+    } else {
+      const data = await Project.searchProject(keyword);
+  
+      res.status(200).json({
+        status: 'success',
+        project: data,
+        message: "Projects fetched successfully"
+      });
+    }
+
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+}
+
+export const getAllProject = async(req, res) => {
+  try {
+    const {page = 1, limit = 10} = req.query
+    const data = await Project.getAllProject(parseInt(page), parseInt(limit));
 
     res.status(200).json({
       status: 'success',
-      project: {
-        data,
-        totalData: total
-      },
+      project: data,
       message: "Projects fetched successfully"
     });
+
   } catch (error) {
     res.status(500).json({message: error.message})
   }
