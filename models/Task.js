@@ -71,7 +71,7 @@ const Task = {
       SELECT
         task.id_task, task.nama_task, task.tgl_mulai_task, task.tgl_akhir_task, task.status_task,
         project.id_project, project.nama_project,
-        user.username, user.nama_lengkap
+        user.id_user, user.username, user.nama_lengkap
       FROM task 
         LEFT JOIN project ON task.id_project = project.id_project
         LEFT JOIN user ON task.id_user = user.id_user

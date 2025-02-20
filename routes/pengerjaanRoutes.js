@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/pengerjaans",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan"]),
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
   pengerjaanController.getAllPengerjaan
 );
 
@@ -24,19 +24,25 @@ router.get("/pengerjaans/:id_pengerjaan",
 
 router.get("/pengerjaans/tasks/:id_task/:id_pengerjaan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan"]),
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
   pengerjaanController.getDetailPengerjaanByTaskId
 );
 
 router.post("/pengerjaans",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan"]),
+  authMiddleware.authorizeRole(["peserta"]),
   pengerjaanController.postPengerjaan
+);
+
+router.put("/pengerjaans/:id_pengerjaan",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  pengerjaanController.updatePengerjaanByid
 );
 
 router.post("/log_pengerjaans/:id_pengerjaan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["peserta", "pendamping_kampus"]),
   pengerjaanController.postLogPengerjaan
 );
 
