@@ -99,6 +99,25 @@ const Pengerjaan = {
       ...pengerjaanData
     }
   },
+
+  updatePengerjaanByPengerjaanIdUser: async (pengerjaanData, idPengerjaan) => {
+    const {id_task, file_github, file_ss} = pengerjaanData;
+    
+    const query = `
+      UPDATE pengerjaan SET id_task = ?, file_github = ?, file_ss = ?
+        WHERE id_pengerjaan = ?
+    `;
+
+    const [result] = await sequelize.query(query, {
+      replacements: [parseInt(id_task), file_github, file_ss, idPengerjaan]
+    });
+
+    return {
+      result: result.info,
+      id_pengerjaan: idPengerjaan,
+      ...pengerjaanData
+    }
+  },
 }
 
 export default Pengerjaan;

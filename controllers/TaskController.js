@@ -89,6 +89,7 @@ export const postTask = async(req, res) => {
       message: 'Add new task data successfully'
     });
   } catch (error) {
+    
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'

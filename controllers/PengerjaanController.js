@@ -1,5 +1,7 @@
 import Pengerjaan from "../models/Pengerjaan.js";
 import LogPengerjaan from "../models/LogPengerjaan.js";
+import path from "path";
+import fs from "fs";
 
 export const getAllPengerjaan = async(req, res) => {
   try {
@@ -97,11 +99,12 @@ export const getDetailPengerjaanByTaskId = async(req, res) => {
 
 export const postPengerjaan = async(req, res) => {
   console.log("Body Data:", req.body);
-
+  
   const { id_task, catatan, jenis_catatan, tgl_pengerjaan } = req.body;
   const file_github = req.files?.file_github ? req.files.file_github[0].path : null;
   const file_ss = req.files?.file_ss ? req.files.file_ss[0].path : null;
-
+  
+  console.log("Files Data:", req.file_github);
   if (!file_github || !file_ss) {
     return res.status(400).json({
       status: "error",
@@ -124,13 +127,73 @@ export const postPengerjaan = async(req, res) => {
       message: 'created data pengerjaan success'
     });
   } catch (error) {
-    console.log("Files Data:", file_github);
     res.status(500).json({
       status: 'error',
       message: 'Internal server error'
     });
   }
 };
+
+export const updatePengerjaanByid = async (req, res) => {
+  console.log("Body Data:", req.body);
+  console.log("Files Data:", req.files);
+
+  const {id_pengerjaan} = req.params;
+  const {id_task} = req.body;
+  const file_github_new = req.files?.file_github ? req.files.file_github[0].path : null;
+  const file_ss_new = req.files?.file_ss ? req.files.file_ss[0].path : null;
+
+  try {
+    // ambil data lama di database
+    const pengerjaanOld = await Pengerjaan.getPengerjaanById(parseInt(id_pengerjaan));
+    if (!pengerjaanOld) {
+      return res.status(404).json({
+        status: "error",
+        message: "Pengerjaan not found!"
+      });
+    }
+
+    // Cek apakah ada file baru
+    if(file_github_new && pengerjaanOld.file_github) {
+      // Menghapus file lama
+      const filePathGithub = path.join(process.cwd(), pengerjaanOld.file_github)
+      if(fs.existsSync(filePathGithub)) {
+        fs.unlinkSync(filePathGithub);
+        console.log(`✅ File lama file_github (${pengerjaanOld.file_github}) dihapus`);
+      }
+    }
+   
+    if(file_ss_new && pengerjaanOld.file_ss) {
+      // Menghapus file lama
+      const filePathSs = path.join(process.cwd(), pengerjaanOld.file_ss)
+      if(fs.existsSync(filePathSs)) {
+        fs.unlinkSync(filePathSs);
+        console.log(`✅ File lama file_ss (${pengerjaanOld.file_ss}) dihapus`);
+      }
+    }
+
+    const pengerjaanData = {
+      id_task,
+      file_github: file_github_new || pengerjaanOld.file_github,
+      file_ss: file_ss_new || pengerjaanOld.file_ss,
+    }
+
+    const result = await Pengerjaan.updatePengerjaanByPengerjaanIdUser(pengerjaanData, parseInt(id_pengerjaan))
+
+    res.status(200).json({
+      status: 'success',
+      data: result,
+      message: "updated data pengerjaan successfully"
+    })
+  } catch (error) {
+    console.error("Error message: ", error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    })
+  }
+
+}
 
 export const postLogPengerjaan = async(req, res) => {
   const {id_pengerjaan} = req.params;
