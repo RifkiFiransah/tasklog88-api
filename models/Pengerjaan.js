@@ -107,7 +107,7 @@ const Pengerjaan = {
       type: sequelize.QueryTypes.SELECT
     });
 
-    return data[0];
+    return data;
   },
  
   getDetailPengerjaanByTaskId: async(taskId, pengerjaanId) => {
