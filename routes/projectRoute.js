@@ -14,6 +14,13 @@ router.get(
   projectController.getAllProjects
 );
 
+router.get(
+  '/project', 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
+  projectController.getAllProject
+);
+
 // Route Get Project By Id
 router.get(
   '/projects/:id_project',

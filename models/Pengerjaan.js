@@ -1,7 +1,7 @@
 import sequelize from "../config/config.js";
 
 const Pengerjaan = {
-  getAllPengerjaan: async() => {
+  getAllPengerjaans: async() => {
     try {
       const query = `
         SELECT
@@ -31,6 +31,50 @@ const Pengerjaan = {
       throw new Error("Error fetching data: "+error.message)
     }
   },
+
+  getAllPengerjaan: async (page = 1, limit = 10) => {
+    const offset = (page - 1) * limit;
+
+    try {
+      const query = `
+      SELECT
+          pengerjaan.id_pengerjaan, pengerjaan.id_task, pengerjaan.file_github, pengerjaan.file_ss,
+          task.nama_task, task.status_task
+      FROM pengerjaan 
+      LEFT JOIN task ON pengerjaan.id_task = task.id_task
+      LIMIT :limit OFFSET :offset
+      `;      
+
+      const data = await sequelize.query(query, {
+        replacements: {
+          limit: limit,
+          offset: offset
+        }
+      })
+
+      return data[0]
+    } catch (error) {
+      throw new Error("Error fetching data: "+error.message)
+    }
+  },
+
+  // searchPengerjaan: async(keyword) => {
+  //   const query = `
+  //     SELECT pengerjaan.id_pengerjaan, pengerjaan.id_task, pengerjaan.file_github, pengerjaan.file_ss,
+  //         task.nama_task, task.status_task
+  //     FROM pengerjaan 
+  //     LEFT JOIN task ON pengerjaan.id_task = task.id_task
+  //     WHERE nama_project LIKE ? OR status_project LIKE ? 
+  //   `;
+
+  //   const data = await sequelize.query(query, {
+  //     replacements: [`%${keyword}%`, `%${keyword}%`,]
+  //   });
+
+  //   return {
+  //     data
+  //   }
+  // },
 
   getPengerjaanById: async(pengerjaanId) => {
     const query = `

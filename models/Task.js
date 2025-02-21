@@ -34,6 +34,53 @@ const Task = {
     }
   },
 
+  getAllTask: async(page = 1, limit = 10) => {
+    const offset = (page - 1) * limit;
+      
+    try {
+      const query = `
+      SELECT
+        task.id_task, task.nama_task, task.tgl_mulai_task, task.tgl_akhir_task, task.status_task,
+        project.id_project, project.nama_project,
+        user.username, user.nama_lengkap
+        FROM task
+        LEFT JOIN project ON task.id_project = project.id_project 
+        LEFT JOIN user ON task.id_user = user.id_user
+        LIMIT :limit OFFSET :offset
+      `;      
+
+      const data = await sequelize.query(query, {
+        replacements: {
+          limit: limit,
+          offset: offset
+        }
+      });
+
+      return data[0];
+    } catch (error) {
+      throw new Error("Error message: "+error.message)
+    }
+  },
+
+  searchTasks: async(keyword) => {
+    const query = `
+      SELECT
+        task.id_task, task.nama_task, task.tgl_mulai_task, task.tgl_akhir_task, task.status_task,
+        project.id_project, project.nama_project,
+        user.username, user.nama_lengkap
+        FROM task
+        LEFT JOIN project ON task.id_project = project.id_project 
+        LEFT JOIN user ON task.id_user = user.id_user
+      WHERE nama_task LIKE ? OR status_task LIKE ? 
+    `;
+
+    const data = await sequelize.query(query, {
+      replacements: [`%${keyword}%`, `%${keyword}%`,]
+    });
+
+    return data[0]
+  },
+
   // get task by user id
   getTaskByUserId: async(userId) => {
     console.log(userId);

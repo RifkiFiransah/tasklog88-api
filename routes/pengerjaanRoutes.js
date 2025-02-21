@@ -7,6 +7,12 @@ const router = express.Router();
 router.get("/pengerjaans",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
+  pengerjaanController.getAllPengerjaans
+);
+
+router.get("/pengerjaan",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
   pengerjaanController.getAllPengerjaan
 );
 

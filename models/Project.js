@@ -29,6 +29,44 @@ const Project = {
       throw new Error("Error fetching data: "+error.message)
     }
   },
+
+  getAllProject: async(page = 1, limit = 10) => {
+    try {
+      const offset = (page - 1) * limit;
+      const query = `
+      SELECT * FROM project LIMIT :limit OFFSET :offset
+      `;
+      const data = await sequelize.query(query, {
+        replacements: {
+          limit: limit,
+          offset: offset
+        },
+        type: sequelize.QueryTypes.SELECT
+      })
+
+      return {
+        data
+      };
+    } catch (error) {
+      throw new Error("Error fetching data: "+error.message);
+    }
+  },
+
+  searchProject: async(keyword) => {
+    const query = `
+      SELECT * 
+        FROM project
+      WHERE nama_project LIKE ? OR status_project LIKE ? 
+    `;
+
+    const data = await sequelize.query(query, {
+      replacements: [`%${keyword}%`, `%${keyword}%`,]
+    });
+
+    return {
+      data
+    }
+  },
   
   // Get Project by id
   getProjectById: async(projectId) => {

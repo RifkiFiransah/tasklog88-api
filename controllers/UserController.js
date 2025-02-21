@@ -4,14 +4,40 @@ import bcrypt from "bcryptjs";
 // Get all data users
 export const GetAllUsers = async(req, res) => {
   try {
-    const {data, total} = await User.getAllUsers()
+    const {keyword} = req.query;
+    if(!keyword) {
+      const {data, total} = await User.getAllUsers()
+  
+      res.status(200).json({
+        status: 'success',
+        project: {
+          data,
+          totalData: total
+        },
+        message: "User fetched successfully"
+      });
+    } else {
+      const data = await User.searchUser(keyword);
+      res.status(200).json({
+        status: 'success',
+        data,
+        message: "User fetched successfully"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+}
+
+export const GetAllUser = async(req, res) => {
+  const {page = 1, limit = 10} = req.query;
+
+  try {
+    const data = await User.getAllUser(parseInt(page), parseInt(limit));
 
     res.status(200).json({
       status: 'success',
-      project: {
-        data,
-        totalData: total
-      },
+      data,
       message: "User fetched successfully"
     });
   } catch (error) {
