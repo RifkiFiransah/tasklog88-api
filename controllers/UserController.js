@@ -10,10 +10,8 @@ export const GetAllUsers = async(req, res) => {
   
       res.status(200).json({
         status: 'success',
-        project: {
-          data,
-          totalData: total
-        },
+        data,
+        totalData: total,
         message: "User fetched successfully"
       });
     } else {

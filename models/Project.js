@@ -44,9 +44,7 @@ const Project = {
         type: sequelize.QueryTypes.SELECT
       })
 
-      return {
-        data
-      };
+      return data;
     } catch (error) {
       throw new Error("Error fetching data: "+error.message);
     }
@@ -63,9 +61,7 @@ const Project = {
       replacements: [`%${keyword}%`, `%${keyword}%`,]
     });
 
-    return {
-      data
-    }
+    return data[0]
   },
   
   // Get Project by id

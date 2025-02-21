@@ -71,12 +71,12 @@ const LogPengerjaan = {
         VALUES(?, ?, ?, ?)
     `;
 
-    const [result] = await sequelize.query(query, {
+    const [data] = await sequelize.query(query, {
       replacements: [parseInt(id_pengerjaan), catatan, jenis_catatan, tgl_pengerjaan]
     });
 
     return {
-      id: result.insertId,
+      id: data.insertId,
       ...logData,
     }
   },

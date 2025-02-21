@@ -5,11 +5,12 @@ import fs from "fs";
 
 export const getAllPengerjaans = async(req, res) => {
   try {
-    const result = await Pengerjaan.getAllPengerjaans();
+    const {data, total} = await Pengerjaan.getAllPengerjaans();
 
     res.status(200).json({
       status: 'success',
-      data: result,
+      data,
+      total,
       message: "fetched all data pengerjaan success"
     });
   } catch (error) {
@@ -24,11 +25,11 @@ export const getAllPengerjaan = async(req, res) => {
   const {page = 1, limit = 10 } = req.query
 
   try {
-    const result = await Pengerjaan.getAllPengerjaan(parseInt(page), parseInt(limit));
+    const data = await Pengerjaan.getAllPengerjaan(parseInt(page), parseInt(limit));
 
     res.status(200).json({
       status: 'success',
-      data: result,
+      data,
       message: "fetched limit data pengerjaan success"
     });
   } catch (error) {
@@ -140,8 +141,8 @@ export const postPengerjaan = async(req, res) => {
     res.status(201).json({
       status: 'success',
       data: {
-        result,
-        logResult
+        pengerjaan: result,
+        log_pengerjaan: logResult,
       },
       message: 'created data pengerjaan success'
     });
@@ -225,13 +226,11 @@ export const postLogPengerjaan = async(req, res) => {
   const pengerjaanData = req.body;
 
   try {
-    const result = await LogPengerjaan.addLogPengerjaan(id_pengerjaan, pengerjaanData)
+    const data = await LogPengerjaan.addLogPengerjaan(id_pengerjaan, pengerjaanData)
 
     res.status(201).json({
       status: 'success',
-      data: {
-        result,
-      },
+      data,
       message: 'created data pengerjaan success'
     });
   } catch (error) {

@@ -9,10 +9,8 @@ export const getAllProjects = async(req, res) => {
   
       res.status(200).json({
         status: 'success',
-        project: {
-          data,
-          totalData: total
-        },
+        data,
+        totalData: total,
         message: "Projects fetched successfully"
       });
     } else {
@@ -77,7 +75,7 @@ export const postProject = async(req, res) => {
   try {
     const newProject = await Project.postProject(projectData)
     res.status(201).json({
-      message: 'success',
+      status: 'success',
       data: newProject,
       message: 'Project created successfully'
     })

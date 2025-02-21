@@ -8,10 +8,8 @@ export const getAllTasks = async(req, res) => {
   
       res.status(200).json({
         status: 'success',
-        data: {
-          data,
-          total
-        },
+        data,
+        total,
         message: 'Tasks fetched successfully'
       });
     } else {
@@ -57,12 +55,13 @@ export const getTaskByUser = async(req, res) => {
   console.log(id_user);
   
   try {
-    const data = await Task.getTaskByUserId(parseInt(id_user));
+    const {data, total} = await Task.getTaskByUserId(parseInt(id_user));
     
     if(data){
       res.status(200).json({
         status: 'success',
         data,
+        total,
         message: 'Task by user id fetched successfully'
       });
     } else {
