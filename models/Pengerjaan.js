@@ -19,12 +19,12 @@ const Pengerjaan = {
         type: sequelize.QueryTypes.SELECT
       });
   
-      const result = await sequelize.query(query, {
+      const data = await sequelize.query(query, {
         type: sequelize.QueryTypes.SELECT
       });
   
       return {
-        result,
+        data,
         total: resultCount.total
       }
     } catch (error) {
