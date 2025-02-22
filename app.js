@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import taskRoutes from "./routes/taskRoutes.js";
 import pengerjaanRoutes from "./routes/pengerjaanRoutes.js";
 import upload from "./middlewares/uploadMiddleware.js";
+import LogPengerjaanRoutes from "./routes/logPengerjaanRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 3090;
@@ -40,6 +41,7 @@ const init = async () => {
     app.use('/api/v1', userRoutes);
     app.use('/api/v1', authRoutes);
     app.use('/api/v1', taskRoutes);
+    app.use('/api/v1', LogPengerjaanRoutes);
     app.use('/api/v1', upload.fields([
         { name: 'file_github', maxCount: 1 },
         { name: 'file_ss', maxCount: 1 }
