@@ -7,12 +7,12 @@ const router = express.Router();
 // Route for user without authentication and authorization
 router.get("/users", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["pendamping_lapangan", "pendamping_kampus"]),
   userController.GetAllUsers
 );
 router.get("/user", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["pendamping_lapangan", "pendamping_kampus"]),
   userController.GetAllUser
 );
 router.get("/users/:id_user", 
@@ -22,12 +22,12 @@ router.get("/users/:id_user",
 );
 router.post("/users/", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["pendamping_lapangan"]),
   userController.AddUser
 );
 router.put("/users/:id_user", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["pendamping_lapangan", "pendamping_kampus"]),
   userController.UpdateUserById
 );
 router.put("/users/password/:id_user", 
@@ -37,7 +37,7 @@ router.put("/users/password/:id_user",
 );
 router.delete("/users/:id_user", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["pendamping_lapangan"]),
   userController.DeleteUserById
 );
 

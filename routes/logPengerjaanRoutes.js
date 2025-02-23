@@ -16,10 +16,10 @@ router.get("/pengerjaans/log_pengerjaan/:id_pengerjaan",
   LogPengerjaanController.getLogPengerjaanByIdPengerjaan
 );
 
-router.get("/pengerjaans/log_pengerjaan/detail/:id_log_pengerjaan/:id_pengerjaan",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
-  LogPengerjaanController.getDetailLogPengerjaan
-);
+// router.get("/pengerjaans/log_pengerjaan/detail/:id_log_pengerjaan/:id_pengerjaan",
+//   authMiddleware.authenticate,
+//   authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
+//   LogPengerjaanController.getDetailLogPengerjaan
+// );
 
 export default router;
