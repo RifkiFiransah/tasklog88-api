@@ -3,11 +3,7 @@ import sequelize from "../config/config.js";
 const User = {
   // Get all data users
   getAllUsers: async() => {
-    // const query = `
-    // SELECT * FROM user
-    // `;
-    // const result = await sequelize.query(query);
-    // return {result}
+
     try {
       const query = `
         SELECT * FROM user
