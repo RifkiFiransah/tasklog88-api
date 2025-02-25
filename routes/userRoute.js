@@ -27,12 +27,12 @@ router.post("/users/",
 );
 router.put("/users/:id_user", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["pendamping_lapangan"]),
   userController.UpdateUserById
 );
 router.put("/users/password/:id_user", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(['peserta', "pendamping_lapangan"]),
   userController.UpdateUserWithPassword
 );
 router.delete("/users/:id_user", 

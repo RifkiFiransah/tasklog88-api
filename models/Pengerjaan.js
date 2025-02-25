@@ -58,24 +58,6 @@ const Pengerjaan = {
     }
   },
 
-  // searchPengerjaan: async(keyword) => {
-  //   const query = `
-  //     SELECT pengerjaan.id_pengerjaan, pengerjaan.id_task, pengerjaan.file_github, pengerjaan.file_ss,
-  //         task.nama_task, task.status_task
-  //     FROM pengerjaan 
-  //     LEFT JOIN task ON pengerjaan.id_task = task.id_task
-  //     WHERE nama_project LIKE ? OR status_project LIKE ? 
-  //   `;
-
-  //   const data = await sequelize.query(query, {
-  //     replacements: [`%${keyword}%`, `%${keyword}%`,]
-  //   });
-
-  //   return {
-  //     data
-  //   }
-  // },
-
   getPengerjaanById: async(pengerjaanId) => {
     const query = `
       SELECT 
