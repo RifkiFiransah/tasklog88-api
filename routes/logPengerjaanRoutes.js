@@ -4,6 +4,12 @@ import express from "express";
 
 const router = express.Router();
 
+router.get("/pengerjaans/log/user/:id_user",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  LogPengerjaanController.getAllLogPengerjaanByUser
+);
+
 router.get("/pengerjaans/log/:id_log_pengerjaan",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),

@@ -22,6 +22,24 @@ router.get("/tasks/user",
   taskController.getTaskByUser
 );
 
+router.get("/tasks/:id_task/user", 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  taskController.getDetailTaskByUserId
+);
+
+router.get("/tasks/project/:id_project/user", 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  taskController.getTaskByUserProjectId
+);
+
+router.get("/tasks/project/:id_project/", 
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole(["peserta"]),
+  taskController.getTaskByProjectId
+);
+
 router.put("/tasks/:id_task/user", 
   authMiddleware.authenticate,
   authMiddleware.authorizeRole(["peserta"]),

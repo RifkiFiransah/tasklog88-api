@@ -48,7 +48,7 @@ router.put("/pengerjaans/:id_pengerjaan",
 
 router.post("/log_pengerjaans/:id_pengerjaan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta", "pendamping_kampus"]),
+  authMiddleware.authorizeRole(["peserta", "pendamping_kampus", "pendamping_lapangan"]),
   pengerjaanController.postLogPengerjaan
 );
 

@@ -81,6 +81,46 @@ const Task = {
     return data[0]
   },
 
+  getDetailTaskByUserId: async(userId, taskId) => {
+    try {
+      const query = `
+      SELECT task.id_task, task.nama_task, task.tgl_mulai_task, task.tgl_akhir_task, task.status_task,
+      project.id_project, project.nama_project FROM task 
+      LEFT JOIN project ON task.id_project = project.id_project
+      WHERE task.id_user = ? AND task.id_task = ?
+      `
+
+      const data = await sequelize.query(query, {
+        replacements: [userId, taskId],
+        type: sequelize.QueryTypes.SELECT
+      });
+  
+      return data[0]
+    } catch (error) {
+      throw new Error("Error message: "+error.message);
+    }
+  },
+
+  getTaskByUserProjectId: async(userId, projectId) => {
+    try {
+      const query = `
+      SELECT task.id_task, task.nama_task, task.tgl_mulai_task, task.tgl_akhir_task, task.status_task,
+      project.id_project, project.nama_project FROM task 
+      LEFT JOIN project ON task.id_project = project.id_project
+      WHERE task.id_user = ? AND task.id_project = ?
+      `
+
+      const data = await sequelize.query(query, {
+        replacements: [userId, projectId],
+        type: sequelize.QueryTypes.SELECT
+      });
+  
+      return data[0]
+    } catch (error) {
+      throw new Error("Error message: "+error.message);
+    }
+  },
+
   // get task by user id
   getTaskByUserId: async(userId) => {
     console.log(userId);
@@ -103,6 +143,36 @@ const Task = {
     
     const [countResult] = await sequelize.query(queryCount, {
       replacements: [userId],
+      type: sequelize.QueryTypes.SELECT
+    });
+
+    return {
+      data,
+      total: countResult.total
+    }
+  },
+  
+  getTaskByProjectId: async(projectId) => {
+    console.log(projectId);
+
+    const query = `
+    SELECT 
+      task.id_task, task.nama_task, task.tgl_mulai_task, task.tgl_akhir_task, task.status_task,
+      project.id_project, project.nama_project
+    FROM task
+      LEFT JOIN project ON task.id_project = project.id_project
+    WHERE task.id_project = ?
+    `;
+
+    const queryCount = `SELECT COUNT(*) as total FROM task WHERE id_project = ?`
+
+    const data = await sequelize.query(query, {
+      replacements: [projectId],
+      type: sequelize.QueryTypes.SELECT
+    });
+    
+    const [countResult] = await sequelize.query(queryCount, {
+      replacements: [projectId],
       type: sequelize.QueryTypes.SELECT
     });
 

@@ -54,6 +54,30 @@ export const getAllProjects = async(req, res) => {
   }
 }
 
+export const getProjectByIdUser = async(req, res) => {
+  try {
+    const {id_user} = req.params;
+
+    const result = await Project.getProjectByIdUser(parseInt(id_user));
+
+    if(result){
+      res.status(200).json({
+        status: 'success',
+        data: result,
+        message: "Projects fetched successfully"
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        message: "Projects not found"
+      });
+    }
+
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+}
+
 export const getAllProject = async(req, res) => {
   try {
     const {page = 1, limit = 10} = req.query

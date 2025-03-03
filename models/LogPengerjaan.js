@@ -1,6 +1,51 @@
 import sequelize from "../config/config.js";
 
 const LogPengerjaan = {
+  getAllLogPengerjaanByUser: async(userId) => {
+    try {
+      const query = `
+      SELECT 
+      lp.id_log_pengerjaan, lp.id_pengerjaan, lp.catatan, lp.jenis_catatan, lp.tgl_pengerjaan,
+      p.id_task, p.file_github, p.file_ss,
+      t.nama_task, t.tgl_mulai_task, t.tgl_akhir_task, t.status_task,
+      pr.nama_project,
+      u.username, u.nama_lengkap
+      FROM log_pengerjaan lp
+      JOIN pengerjaan p ON lp.id_pengerjaan = p.id_pengerjaan
+      JOIN task t ON p.id_task = t.id_task
+      JOIN project pr ON t.id_project = pr.id_project
+      JOIN \`user\` u ON t.id_user = u.id_user
+      WHERE u.id_user = ?
+      ORDER BY lp.tgl_pengerjaan DESC
+      `;
+
+      const countQuery = `
+      SELECT COUNT(*) AS total 
+      FROM log_pengerjaan lp
+      JOIN pengerjaan p ON lp.id_pengerjaan = p.id_pengerjaan
+      JOIN task t ON p.id_task = t.id_task
+      JOIN project pr ON t.id_project = pr.id_project
+      JOIN \`user\` u ON t.id_user = u.id_user
+      WHERE u.id_user = ?
+      `
+
+      const [count] = await sequelize.query(countQuery, {
+        replacements: [userId],
+        type: sequelize.QueryTypes.SELECT,
+      }) 
+
+      const result = await sequelize.query(query, {
+        replacements: [userId],
+        type: sequelize.QueryTypes.SELECT
+      });
+
+      return result
+      
+    } catch (error) {
+      throw new Error("Error message: "+error.message)
+    }
+  },
+
   getAllLogPengerjaan: async() => {
     try {
       const query = `

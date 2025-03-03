@@ -146,7 +146,8 @@ export const getDetailPengerjaanByTaskId = async(req, res) => {
 export const postPengerjaan = async(req, res) => {
   console.log("Body Data:", req.body);
   
-  const { id_task, catatan, jenis_catatan, tgl_pengerjaan } = req.body;
+  const today = new Date().toISOString().split('T')[0];
+  const { id_task, catatan = "-", jenis_catatan = "", tgl_pengerjaan = today } = req.body;
   const file_github = req.files?.file_github ? req.files.file_github[0].path : null;
   const file_ss = req.files?.file_ss ? req.files.file_ss[0].path : null;
   

@@ -80,6 +80,94 @@ export const getTaskByUser = async(req, res) => {
   }
 }
 
+export const getTaskByProjectId = async(req, res) => {
+  const {id_project} = req.params;
+  console.log(id_project);
+  
+  try {
+    const {data, total} = await Task.getTaskByProjectId(parseInt(id_project));
+    
+    if(data){
+      res.status(200).json({
+        status: 'success',
+        data,
+        total,
+        message: 'Task by project id fetched successfully'
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        data,
+        message: 'Task by project id not found'
+      });
+    }
+  } catch (error) {
+    console.error("Error task: ", error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
+export const getDetailTaskByUserId = async(req, res) => {
+  const {id_task} = req.params;
+  const id_user = req.userId
+
+  try {
+    const data = await Task.getDetailTaskByUserId(parseInt(id_user), parseInt(id_task));
+    
+    if(data){
+      res.status(200).json({
+        status: 'success',
+        data,
+        message: 'Task by user id fetched successfully'
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        data,
+        message: 'Task by user id not found'
+      });
+    }
+  } catch (error) {
+    console.error("Error get task: ", error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
+export const getTaskByUserProjectId = async(req, res) => {
+  const  {id_project} = req.params;
+  const id_user = req.userId
+
+  try {
+    const data = await Task.getTaskByUserProjectId(parseInt(id_user), parseInt(id_project));
+    
+    if(data){
+      res.status(200).json({
+        status: 'success',
+        data,
+        message: 'Task by project id fetched successfully'
+      });
+    } else {
+      res.status(404).json({
+        status: 'error',
+        data,
+        message: 'Task by project id not found'
+      });
+    }
+  } catch (error) {
+    console.error("Error get task: ", error.message);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
 export const getTaskById = async(req, res) => {
   const {id_task} = req.params;
 
