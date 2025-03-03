@@ -1,6 +1,28 @@
 import sequelize from "../config/config.js";
 
 const Project = {
+  // count project
+  getCountProjects: async(idUser) => {
+    try {
+      const query = `
+      SELECT COUNT(DISTINCT id_project) AS total_project 
+      FROM task 
+      WHERE id_user = ?
+      `;
+
+      const [count] = await sequelize.query(query, {
+        replacements: [idUser],
+        type: sequelize.QueryTypes.SELECT,
+      }) 
+
+      return {
+        total: count?.total_project || 0
+      }
+    } catch (error) {
+      throw new Error("Error fetching data: "+error.message)
+    }
+  },
+
   // Get All Project
   getAllProjects: async() => {
     try {
