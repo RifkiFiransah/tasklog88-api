@@ -1,5 +1,31 @@
 import Project from "../models/Project.js";
 
+export const countProject = async(req, res) => {
+  const {id_user} = req.params
+
+  try {
+    const result = await Project.getCountProjects(parseInt(id_user));
+
+    if(result) {
+      res.status(200).json({
+        status: 'success',
+        data: result,
+        message: 'fetched data project by id user'
+      })
+    } else {
+      res.status(404).json({
+        status: 'error',
+        message: 'not found data project by id user'
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    })
+  }
+}
+
 // Get all Projects
 export const getAllProjects = async(req, res) => {
   try {

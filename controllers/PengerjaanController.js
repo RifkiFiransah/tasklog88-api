@@ -66,6 +66,32 @@ export const getPengerjaanById = async(req, res) => {
   }
 };
 
+export const countPengerjaan = async(req, res) => {
+  const {id_user} = req.params
+
+  try {
+    const result = await Pengerjaan.countPengerjaanByIdUser(parseInt(id_user));
+
+    if(result) {
+      res.status(200).json({
+        status: 'success',
+        data: result,
+        message: 'fetched data pengerjaan by id user'
+      })
+    } else {
+      res.status(404).json({
+        status: 'error',
+        message: 'not found data pengerjaan by id user'
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    })
+  }
+}
+
 export const getPengerjaanByTaskId = async(req, res) => {
     const {id_task} = req.params;
   try {

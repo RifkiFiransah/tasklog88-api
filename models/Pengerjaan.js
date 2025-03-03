@@ -1,6 +1,29 @@
 import sequelize from "../config/config.js";
 
 const Pengerjaan = {
+  countPengerjaanByIdUser: async(idUser) => {
+    try {
+      const query = `
+      SELECT task.id_user, COUNT(pengerjaan.id_pengerjaan) AS total_pengerjaan
+      FROM task
+      JOIN pengerjaan ON task.id_task = pengerjaan.id_task
+      WHERE task.id_user = ?
+      GROUP BY task.id_user
+      `  
+
+      const [count] = await sequelize.query(query, {
+        replacements: [idUser],
+        type: sequelize.QueryTypes.SELECT,
+      })
+
+      return {
+        total: count?.total_pengerjaan || 0
+      }
+    } catch (error) {
+      throw new Error("Error fetching data: "+error.message)
+    }
+  },
+
   getAllPengerjaans: async() => {
     try {
       const query = `
