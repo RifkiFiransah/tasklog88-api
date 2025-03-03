@@ -24,6 +24,10 @@ const Pengerjaan = {
     }
   },
 
+  getPengerjaanByIdUser: async() => {
+    
+  },
+
   getAllPengerjaans: async() => {
     try {
       const query = `

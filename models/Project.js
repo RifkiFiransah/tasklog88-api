@@ -23,6 +23,28 @@ const Project = {
     }
   },
 
+  getProjectByIdUser: async(idUser) => {
+    try {
+      const query = `
+      SELECT DISTINCT 
+      project.id_project, project.nama_project, project.tgl_mulai_project,
+      project.tgl_akhir_project, project.status_project
+      FROM task
+      JOIN project ON task.id_project = project.id_project
+      WHERE task.id_user = ?
+      `
+
+      const data = await sequelize.query(query, {
+        replacements: [idUser],
+        type: sequelize.QueryTypes.SELECT
+      })
+
+      return data;
+    } catch (error) {
+      throw new Error("Error fetching data: "+error.message)
+    }
+  },
+
   // Get All Project
   getAllProjects: async() => {
     try {
