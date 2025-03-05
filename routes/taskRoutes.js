@@ -34,9 +34,9 @@ router.get("/tasks/project/:id_project/user",
   taskController.getTaskByUserProjectId
 );
 
-router.get("/tasks/project/:id_project/", 
+router.get("/tasks/project/:id_project", 
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole(["peserta"]),
+  authMiddleware.authorizeRole(["peserta", "pendamping_lapangan", "pendamping_kampus"]),
   taskController.getTaskByProjectId
 );
 
