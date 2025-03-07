@@ -85,15 +85,23 @@ const LogPengerjaan = {
   },
 
   getLogPengerjaanByIdPengerjaan: async(pengerjaanId) => {
-    const query = `
+    const queryLog = `
       SELECT * FROM log_pengerjaan WHERE id_pengerjaan = ?
     `;
+
+    const queryPengerjaan = `
+      SELECT * FROM pengerjaan WHERE id_pengerjaan = ?
+    `
   
-    const result = await sequelize.query(query, {
+    const resultLog = await sequelize.query(queryLog, {
       replacements: [pengerjaanId]
     });
 
-    return result[0];
+    const resultPengerjaan = await sequelize.query(queryPengerjaan, {
+      replacements: [pengerjaanId]
+    });
+
+    return resultLog[0]
   },
 
   getDetailLogPengerjaan: async(logId, pengerjaanId) => {
