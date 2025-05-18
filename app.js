@@ -17,7 +17,7 @@ const port = process.env.PORT || 3090;
 // mengizinkan url frontend untuk mengakses api
 app.use(
   cors({
-      origin: ["http://localhost:3000", ""],
+      origin: ["https://taskit.delapandelapanlogistics.com", ""],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization']
   })
